@@ -1,4 +1,4 @@
-module sysstats
+module github.com/shagrat164/system-monitoring-daemon
 
 go 1.22.1
 

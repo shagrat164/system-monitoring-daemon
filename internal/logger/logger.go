@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"sysstats/internal/config"
+	"github.com/shagrat164/system-monitoring-daemon/internal/config"
 )
 
 // Уровни логирования.

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"sysstats/internal/config"
+	"github.com/shagrat164/system-monitoring-daemon/internal/config"
 
 	"github.com/stretchr/testify/require"
 )
