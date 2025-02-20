@@ -5,20 +5,37 @@ linters-settings:
   funlen:
     lines: 150
     statements: 80
+  depguard:
+    rules:
+      Main:
+        files:
+          - $all
+          - "!$test"
+        allow:
+          - $gostd
+          - github.com/shagrat164/system-monitoring-daemon
+          - github.com/BurntSushi/toml
+      Test:
+        files:
+          - $test
+        allow:
+          - $gostd
+          - github.com/shagrat164/system-monitoring-daemon
+          - github.com/stretchr/testify
 
 linters:
   disable-all: true
   enable:
     - asciicheck
     - bodyclose
-    - deadcode
+    - copyloopvar
+    #- deadcode
     - depguard
     - dogsled
     - dupl
     - durationcheck
     - errorlint
     - exhaustive
-    - exportloopref
     - funlen
     - gci
     - gocognit
@@ -35,7 +52,7 @@ linters:
     - gosec
     - gosimple
     - govet
-    - ifshort
+    #- ifshort
     - importas
     - ineffassign
     - lll
@@ -51,7 +68,7 @@ linters:
     - rowserrcheck
     - sqlclosecheck
     - staticcheck
-    - structcheck
+    #- structcheck
     - stylecheck
     - tagliatelle
     - thelper
@@ -60,6 +77,6 @@ linters:
     - unconvert
     - unparam
     - unused
-    - varcheck
+    #- varcheck
     - wastedassign
     - whitespace

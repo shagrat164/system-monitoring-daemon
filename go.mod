@@ -1,6 +1,6 @@
 module github.com/shagrat164/system-monitoring-daemon
 
-go 1.22.1
+go 1.24.0
 
 require (
 	github.com/BurntSushi/toml v1.4.0

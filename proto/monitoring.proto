@@ -1,0 +1,23 @@
+syntax = "proto3"
+
+package monitoring;
+
+option go_package = "github.com/shagrat164/system-monitoring-daemon/proto"
+
+// Сервис для мониторинга
+service Monitoring {
+    // Метод для получения статистики
+    rpc GetStats(StatsRequest) returns (stream StatsResponse);
+}
+
+// Запрос на получение статистики
+message StatsRequest {
+    int32 interval = 1; // Интервал обновления (N)
+    int32 duration = 2; // Период усреднения (M)
+}
+
+// Ответ со статистикой
+message StatsResponse {
+    double load_average = 1; // Средняя загрузка системы
+    // TODO
+}
