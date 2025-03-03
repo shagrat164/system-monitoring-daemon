@@ -1,7 +1,11 @@
+grpc_port = "50051"
+
 [logger]
 level = "INFO"
-filePath = "./log.json"
+path = ""
 
-[http]
-host = "0.0.0.0"
-port = 8080
+[metrics]
+load_avg = true
+cpu = true
+disk = true
+filesystem = true

@@ -24,12 +24,12 @@ type Logger struct {
 	logWriter *log.Logger
 }
 
-func New(cfg config.LoggerConf) (*Logger, error) {
+func New(cfg config.LoggerConfig) (*Logger, error) {
 	// Настройка выходного потока (Stderr или файл)
 	var output *os.File
-	if cfg.FilePath != "" {
+	if cfg.Path != "" {
 		var err error
-		output, err = os.OpenFile(cfg.FilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+		output, err = os.OpenFile(cfg.Path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 		if err != nil {
 			return nil, fmt.Errorf("failed to open log file: %w", err)
 		}

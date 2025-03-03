@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/shagrat164/system-monitoring-daemon/proto";
+
+// Сервис для мониторинга
+service Monitoring {
+    // Метод для получения статистики
+    rpc GetStats(StatsRequest) returns (stream StatsResponse);
+}
+
+// Запрос на получение статистики
+message StatsRequest {
+    int32 interval = 1; // Интервал обновления (N)
+    int32 duration = 2; // Период усреднения (M)
+}
+
+// Ответ со статистикой
+message StatsResponse {
+    double load_average_1min = 1;
+    double load_average_5min = 2;
+    double load_average_15min = 3;
+    double cpu_user = 4;    // Процент времени CPU в user mode
+    double cpu_system = 5;  // Процент времени CPU в system mode
+    double cpu_idle = 6;    // Процент времени CPU в idle
+    repeated DiskStats disk_stats = 7;
+    repeated FilesystemStats filesystem_stats = 8;
+}
+
+message DiskStats {
+    string device = 1;
+    double tps = 2;
+    double kb_read = 3;  // Для будущего разделения
+    double kb_write = 4; // Для будущего разделения
+    double kb_total = 5; // Сумма чтения и записи
+}
+
+message FilesystemStats {
+    string filesystem = 1;
+    string mountpoint = 2;
+    double used_mb = 3;
+    double used_percent = 4;
+    double inodes_used = 5;
+    double inodes_percent = 6;
+}

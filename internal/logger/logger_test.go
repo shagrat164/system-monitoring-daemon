@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/shagrat164/system-monitoring-daemon/internal/config"
-
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,7 +27,7 @@ func TestNewLogger(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := config.LoggerConf{Level: tt.level}
+			cfg := config.LoggerConfig{Level: tt.level}
 			logger, err := New(cfg)
 			require.NoError(t, err)
 			require.Equal(t, tt.expectedLevel, logger.level)
@@ -55,7 +54,7 @@ func TestLogLevels(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var buf bytes.Buffer
-			cfg := config.LoggerConf{Level: tt.level}
+			cfg := config.LoggerConfig{Level: tt.level}
 			logger, err := New(cfg)
 			require.NoError(t, err)
 			logger.logWriter.SetOutput(&buf)
@@ -93,7 +92,7 @@ func TestLogLevels(t *testing.T) {
 // TestLogFormat проверяет формат вывода логов (JSON).
 func TestLogFormat(t *testing.T) {
 	var buf bytes.Buffer
-	cfg := config.LoggerConf{Level: constLevelInfo}
+	cfg := config.LoggerConfig{Level: constLevelInfo}
 	logger, err := New(cfg)
 	require.NoError(t, err)
 	logger.logWriter.SetOutput(&buf)
@@ -119,9 +118,9 @@ func TestLogToFile(t *testing.T) {
 	require.NoError(t, err)
 	defer os.Remove(tmpFile.Name())
 
-	cfg := config.LoggerConf{
-		Level:    constLevelInfo,
-		FilePath: tmpFile.Name(),
+	cfg := config.LoggerConfig{
+		Level: constLevelInfo,
+		Path:  tmpFile.Name(),
 	}
 	logger, err := New(cfg)
 	require.NoError(t, err)
