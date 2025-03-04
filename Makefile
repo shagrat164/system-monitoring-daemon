@@ -37,4 +37,15 @@ proto:
 clean:
 	rm -rf ./bin
 
+# Сборка образа Docker
+build-img:
+	docker build \
+		--build-arg=LDFLAGS="$(LDFLAGS)" \
+		-t $(DOCKER_IMG) \
+		-f build/Dockerfile .
+
+# Запуск образа Docker
+run-img: build-img
+	docker run -p 50051:50051 $(DOCKER_IMG)
+
 .PHONY: all build run test lint proto build-client run-client
