@@ -16,7 +16,10 @@ $ go version
 go version go1.24.0 linux/amd64
 ```
 
-# System Monitoring Daemon
+## System Monitoring Daemon
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/shagrat164/system-monitoring-daemon)](https://goreportcard.com/report/github.com/shagrat164/system-monitoring-daemon)
+![GitHub CI](https://github.com/shagrat164/system-monitoring-daemon/actions/workflows/ci.yml/badge.svg)
 
 Этот проект представляет собой демон системного мониторинга, который собирает и передаёт статистику о производительности системы клиентам через gRPC. Он предоставляет данные в реальном времени о загрузке системы, использовании CPU, операциях с дисками и состоянии файловых систем.
 
