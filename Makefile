@@ -48,4 +48,9 @@ build-img:
 run-img: build-img
 	docker run -p 50051:50051 $(DOCKER_IMG)
 
+# Сборка для windows x64
+build-windows:
+	GOOS=windows CGO_ENABLED=0 go build -v -o ./bin/monitoring-daemon-x64.exe ./cmd/daemon
+	GOOS=windows CGO_ENABLED=0 go build -v -o ./bin/monitoring-client-x64.exe ./cmd/client
+
 .PHONY: all build run test lint proto build-client run-client

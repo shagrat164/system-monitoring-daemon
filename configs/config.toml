@@ -6,6 +6,6 @@ path = ""
 
 [metrics]
 load_avg = true
-cpu = false
+cpu = true
 disk = false
 filesystem = false
