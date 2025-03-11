@@ -115,7 +115,7 @@ func TestCollectDiskStats(t *testing.T) {
 			log, _ := logger.New(cfg.Logger)
 			statsChan := make(chan *pb.StatsResponse, tt.wantCount+1)
 
-			go CollectDiskStats(cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
+			go CollectDiskStats(t.Context(), cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
 
 			type diskStats struct {
 				Device string

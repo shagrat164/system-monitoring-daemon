@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -11,7 +12,8 @@ import (
 )
 
 // CollectCPUStats - собирает CPU статистику и отправляет усреднённые данные в канал.
-func CollectCPUStats(cfg *config.Config,
+func CollectCPUStats(ctx context.Context,
+	cfg *config.Config,
 	log *logger.Logger,
 	statsChan chan *pb.StatsResponse,
 	interval, duration int32,
@@ -75,8 +77,13 @@ func CollectCPUStats(cfg *config.Config,
 			CpuIdle:   round(sumIdle / count),
 		}
 
-		log.Debug(stats.String())
+		// log.Debug(fmt.Sprintf("CPU len(history): %d", len(history)))
 
-		statsChan <- stats
+		select {
+		case <-ctx.Done():
+			log.Debug("Gorutine CollectCPUStats is done.")
+			return
+		case statsChan <- stats:
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"time"
 
 	"github.com/shagrat164/system-monitoring-daemon/internal/config"
@@ -9,7 +10,8 @@ import (
 )
 
 // CollectMetrics - запускает сбор всех метрик.
-func CollectMetrics(cfg *config.Config,
+func CollectMetrics(ctx context.Context,
+	cfg *config.Config,
 	log *logger.Logger,
 	statsChan chan *pb.StatsResponse,
 	interval, duration int32,
@@ -22,14 +24,14 @@ func CollectMetrics(cfg *config.Config,
 	filesystemChan := make(chan *pb.StatsResponse)
 
 	// Запускаем сбор load average в отдельной горутине
-	go CollectLoadAvg(cfg, log, loadChan, interval, duration, reader)
+	go CollectLoadAvg(ctx, cfg, log, loadChan, interval, duration, reader)
 
 	// Запускаем сбор CPU статистики в отдельной горутине
-	go CollectCPUStats(cfg, log, cpuChan, interval, duration, cmd)
+	go CollectCPUStats(ctx, cfg, log, cpuChan, interval, duration, cmd)
 
 	// Запускаем сбор статистики по ФС в отдельной горутине
-	go CollectDiskStats(cfg, log, diskChan, interval, duration, cmd)
-	go CollectFilesystemStats(cfg, log, filesystemChan, interval, duration, cmd)
+	go CollectDiskStats(ctx, cfg, log, diskChan, interval, duration, cmd)
+	go CollectFilesystemStats(ctx, cfg, log, filesystemChan, interval, duration, cmd)
 
 	ticker := time.NewTicker(time.Duration(interval) * time.Second)
 	defer ticker.Stop()
@@ -58,6 +60,11 @@ func CollectMetrics(cfg *config.Config,
 			stats.FilesystemStats = filesystemStats.GetFilesystemStats()
 		}
 
-		statsChan <- stats
+		select {
+		case <-ctx.Done():
+			log.Debug("Gorutine CollectMetrics is done.")
+			return
+		case statsChan <- stats:
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,7 +14,8 @@ import (
 )
 
 // CollectFilesystemStats - собирает статистику файловых систем и отправляет усреднённые данные в канал.
-func CollectFilesystemStats(cfg *config.Config,
+func CollectFilesystemStats(ctx context.Context,
+	cfg *config.Config,
 	log *logger.Logger,
 	statsChan chan *pb.StatsResponse,
 	interval, duration int32,
@@ -89,10 +91,21 @@ func CollectFilesystemStats(cfg *config.Config,
 			})
 		}
 
-		if len(pbFsStats) > 0 {
-			statsChan <- &pb.StatsResponse{
-				FilesystemStats: pbFsStats,
-			}
+		if len(pbFsStats) == 0 {
+			continue
+		}
+
+		stats := &pb.StatsResponse{
+			FilesystemStats: pbFsStats,
+		}
+
+		// log.Debug(fmt.Sprintf("Filesystem len(historyMap): %d", len(historyMap)))
+
+		select {
+		case <-ctx.Done():
+			log.Debug("Gorutine CollectFilesystemStats is done.")
+			return
+		case statsChan <- stats:
 		}
 	}
 }

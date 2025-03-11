@@ -54,7 +54,7 @@ func (s *monitoringServer) GetStats(req *pb.StatsRequest, stream pb.Monitoring_G
 	cmd := metrics.RealCommander{}
 
 	// Запускаем сбор данных с учетом N и M из запроса клиента
-	go metrics.CollectMetrics(s.cfg, s.log, s.metricsChan, req.Interval, req.Duration, reader, cmd)
+	go metrics.CollectMetrics(stream.Context(), s.cfg, s.log, s.metricsChan, req.Interval, req.Duration, reader, cmd)
 
 	// Передаем данные из канала в поток
 	for {

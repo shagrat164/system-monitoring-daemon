@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,7 +14,8 @@ import (
 )
 
 // CollectDiskStats - собирает статистику дисков и отправляет усреднённые данные в канал.
-func CollectDiskStats(cfg *config.Config,
+func CollectDiskStats(ctx context.Context,
+	cfg *config.Config,
 	log *logger.Logger,
 	statsChan chan *pb.StatsResponse,
 	interval, duration int32,
@@ -87,9 +89,14 @@ func CollectDiskStats(cfg *config.Config,
 			DiskStats: pbDiskStats,
 		}
 
-		log.Debug(stats.String())
+		// log.Debug(fmt.Sprintf("Disk len(historyMap): %d", len(historyMap)))
 
-		statsChan <- stats
+		select {
+		case <-ctx.Done():
+			log.Debug("Gorutine CollectDiskStats is done.")
+			return
+		case statsChan <- stats:
+		}
 	}
 }
 

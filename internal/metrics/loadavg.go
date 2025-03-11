@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,7 +14,8 @@ import (
 )
 
 // CollectLoadAvg - собирает статистику load average и отправляет усреднённые данные в канал.
-func CollectLoadAvg(cfg *config.Config,
+func CollectLoadAvg(ctx context.Context,
+	cfg *config.Config,
 	log *logger.Logger,
 	loadChan chan *pb.StatsResponse,
 	interval, duration int32,
@@ -82,7 +84,14 @@ func CollectLoadAvg(cfg *config.Config,
 			LoadAverage_15Min: round(sum15 / count),
 		}
 
-		loadChan <- stats
+		// log.Debug(fmt.Sprintf("Loadavg len(history): %d", len(history)))
+
+		select {
+		case <-ctx.Done():
+			log.Debug("Gorutine CollectLoadAvg is done.")
+			return
+		case loadChan <- stats:
+		}
 	}
 }
 

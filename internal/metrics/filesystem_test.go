@@ -134,7 +134,7 @@ func TestCollectFilesystemStats(t *testing.T) {
 			log, _ := logger.New(cfg.Logger)
 			statsChan := make(chan *pb.StatsResponse, tt.wantCount+1)
 
-			go CollectFilesystemStats(cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
+			go CollectFilesystemStats(t.Context(), cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
 
 			type fsStats struct {
 				Filesystem    string

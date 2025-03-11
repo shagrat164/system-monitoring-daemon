@@ -136,7 +136,7 @@ func TestCollectCPUStats(t *testing.T) {
 			log, _ := logger.New(cfg.Logger)
 			statsChan := make(chan *pb.StatsResponse, tt.wantCount+1)
 
-			go CollectCPUStats(cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
+			go CollectCPUStats(t.Context(), cfg, log, statsChan, tt.interval, tt.duration, tt.cmd)
 
 			type cpuStats struct {
 				User   float64

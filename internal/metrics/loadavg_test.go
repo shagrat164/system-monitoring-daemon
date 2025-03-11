@@ -122,7 +122,7 @@ func TestCollectLoadAvg(t *testing.T) {
 			log, _ := logger.New(cfg.Logger)
 			loadChan := make(chan *pb.StatsResponse)
 
-			go CollectLoadAvg(cfg, log, loadChan, tt.interval, tt.duration, tt.reader)
+			go CollectLoadAvg(t.Context(), cfg, log, loadChan, tt.interval, tt.duration, tt.reader)
 
 			var gotLoads []struct{ l1, l5, l15 float64 }
 			timeout := time.After(time.Duration(tt.wantCount*2) * time.Second)

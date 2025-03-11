@@ -1,7 +1,7 @@
 grpc_port = "50051"
 
 [logger]
-level = "INFO"
+level = "DEBUG"
 path = ""
 
 [metrics]
